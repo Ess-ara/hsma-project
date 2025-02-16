@@ -36,3 +36,44 @@ df_test \
     .plot(figsize=(10, 5), title='Doctors', ms=10)
 plt.show()
 
+#Simple prophet model
+#format the data for prophet model (ds and y)
+df_train_prophet = df_train.reset_index() \
+    .rename(columns={"Date":"ds",
+                     "Fellows":"y"})
+
+#check that the columns names hve chnaged and have been formatted
+df_train_prophet.head()
+
+#apply and train the model
+%time
+model = Prophet()
+model.fit(df_train_prophet)
+
+#test the model
+df_test_prophet = df_test.reset_index() \
+    .rename(columns={"Date":"ds",
+                     "Fellows":"y"})
+
+#save as new dataframe
+df_test_fcst = model.predict(df_test_prophet)
+
+#model output of predictions which includes trend
+df_test_fcst.head()
+
+#plot prophet forecast on gragh
+"""
+model will show upper and lower count that it believes
+is reasonable for forecast of thw future
+"""
+fig, ax = plt.subplots(figsize=(10, 5))
+fig = model.plot(df_test_fcst, ax=ax)
+ax.set_title('Prophet Forecast')
+plt.show()
+
+"""
+the model trends etc can also be analysed and so 
+we can plot this
+"""
+fig = model.plot_components(df_test_fcst)
+plt.show()
