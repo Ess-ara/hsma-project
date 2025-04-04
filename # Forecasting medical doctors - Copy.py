@@ -27,7 +27,7 @@ df.plot(#style='-',
 plt.show()
 
 #Time series features - Train/test split
-split_date= "2024-05-01"
+split_date= "01-06-2024"
 df_train =df.loc[df.index <= split_date].copy()
 df_test = df.loc[df.index > split_date].copy()
 
